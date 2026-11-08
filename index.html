@@ -4,38 +4,265 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Werkzeugverleih Wolter</title>
+  <meta name="description" content="Werkzeugverleih Wolter in Sondershausen. KFZ-Spezialwerkzeuge, Bau- und Elektrowerkzeuge mieten.">
+  <title>Werkzeugverleih Wolter | Sondershausen</title>
   <style>
+    :root {
+      --navy: #102b4c;
+      --blue: #1768b3;
+      --light: #f3f6fa;
+      --text: #243348;
+    }
+
+    * { box-sizing: border-box; }
+
     body {
       margin: 0;
       font-family: Arial, sans-serif;
-      background: #f4f7fb;
-      color: #172b46;
-      text-align: center;
+      color: var(--text);
+      background: white;
+      line-height: 1.6;
     }
+
+    .container {
+      width: min(1120px, 92%);
+      margin: auto;
+    }
+
     header {
-      background: #102d52;
+      background: white;
+      border-bottom: 1px solid #e2e8f0;
+    }
+
+    .header-inner {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 24px;
+      padding: 12px 0;
+    }
+
+    .brand {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      color: var(--navy);
+      text-decoration: none;
+      font-weight: bold;
+      font-size: 20px;
+    }
+
+    .brand img {
+      width: 76px;
+      height: 76px;
+      object-fit: contain;
+    }
+
+    nav {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 22px;
+    }
+
+    nav a {
+      color: var(--navy);
+      text-decoration: none;
+      font-weight: bold;
+    }
+
+    nav a:hover { color: var(--blue); }
+
+    .hero {
+      background: linear-gradient(120deg, #0b203a, #164574);
       color: white;
-      padding: 45px 20px;
+      padding: 95px 0;
     }
-    main {
-      padding: 60px 20px;
+
+    .hero h1 {
+      font-size: clamp(34px, 5vw, 58px);
+      line-height: 1.15;
+      max-width: 760px;
+      margin: 0 0 22px;
     }
-    a {
-      color: #1266bd;
+
+    .hero p {
+      font-size: 19px;
+      max-width: 650px;
+      margin-bottom: 32px;
+    }
+
+    .button {
+      display: inline-block;
+      padding: 14px 24px;
+      background: white;
+      color: var(--navy);
+      text-decoration: none;
+      border-radius: 7px;
+      font-weight: bold;
+    }
+
+    section { padding: 70px 0; }
+
+    h2 {
+      color: var(--navy);
+      font-size: 32px;
+      margin-top: 0;
+    }
+
+    .light { background: var(--light); }
+
+    .grid {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 24px;
+      margin-top: 30px;
+    }
+
+    .card {
+      background: white;
+      padding: 30px;
+      border: 1px solid #e0e7ef;
+      border-radius: 12px;
+      box-shadow: 0 4px 18px #102b4c0a;
+    }
+
+    .card h3 {
+      color: var(--navy);
+      margin-top: 0;
+    }
+
+    footer {
+      background: #0b203a;
+      color: white;
+      padding: 35px 0;
+    }
+
+    footer p { margin: 5px 0; }
+
+    @media (max-width: 700px) {
+      .header-inner {
+        flex-direction: column;
+        align-items: flex-start;
+      }
+
+      .brand img {
+        width: 62px;
+        height: 62px;
+      }
+
+      nav { gap: 14px; }
+      .hero { padding: 65px 0; }
+      .grid { grid-template-columns: 1fr; }
     }
   </style>
 </head>
 <body>
+
   <header>
-    <h1>Werkzeugverleih Wolter</h1>
-    <p>Werkzeuge und Maschinen mieten in Sondershausen</p>
+    <div class="container header-inner">
+      <a class="brand" href="#start">
+        <img src="Logo.png" alt="Logo Werkzeugverleih Wolter">
+        <span>Werkzeugverleih Wolter</span>
+      </a>
+
+      <nav aria-label="Hauptnavigation">
+        <a href="#start">Startseite</a>
+        <a href="#werkzeuge">Werkzeuge</a>
+        <a href="#ablauf">Mietablauf</a>
+        <a href="#kontakt">Kontakt</a>
+      </nav>
+    </div>
   </header>
+
   <main>
-    <h2>Unsere Website entsteht!</h2>
-    <p>Werkzeuge mieten statt kaufen.</p>
-    <p>KFZ-Spezialwerkzeuge, Bau- und Elektrowerkzeuge.</p>
-    <p>Schon bald findest du hier unseren Werkzeugkatalog.</p>
+    <div class="hero" id="start">
+      <div class="container">
+        <h1>Werkzeug benötigt? Einfach mieten statt kaufen!</h1>
+        <p>
+          Werkzeugverleih Wolter in Sondershausen.
+          Miete Werkzeuge und Maschinen für dein nächstes Projekt.
+        </p>
+        <a class="button" href="#werkzeuge">
+          Werkzeuge entdecken
+        </a>
+      </div>
+    </div>
+
+    <section class="light" id="werkzeuge">
+      <div class="container">
+        <h2>Unsere Werkzeugkategorien</h2>
+        <p>Entdecke unser Angebot für verschiedene Einsatzbereiche.</p>
+
+        <div class="grid">
+          <div class="card">
+            <h3>KFZ-Spezialwerkzeuge</h3>
+            <p>
+              Spezialwerkzeuge für Wartung und Reparatur
+              von Fahrzeugen.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Bauwerkzeuge</h3>
+            <p>
+              Leistungsfähige Werkzeuge für Renovierung,
+              Umbau und Bauprojekte.
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Holzbearbeitung</h3>
+            <p>
+              Sägen, Fräsen und Schleifgeräte
+              für deine Holzprojekte.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section id="ablauf">
+      <div class="container">
+        <h2>So funktioniert die Vermietung</h2>
+        <div class="grid">
+          <div class="card">
+            <h3>1. Werkzeug auswählen</h3>
+            <p>Suche das passende Gerät für dein Vorhaben.</p>
+          </div>
+          <div class="card">
+            <h3>2. Anfrage stellen</h3>
+            <p>Kontaktiere uns und kläre die Verfügbarkeit.</p>
+          </div>
+          <div class="card">
+            <h3>3. Werkzeug abholen</h3>
+            <p>Hole dein Werkzeug zum vereinbarten Termin ab.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section class="light" id="kontakt">
+      <div class="container">
+        <h2>Kontakt</h2>
+        <p>
+          Du möchtest ein Werkzeug mieten oder hast Fragen?
+          Nimm Kontakt mit Werkzeugverleih Wolter auf.
+        </p>
+        <p><strong>Standort:</strong> Sondershausen</p>
+        <p>
+          Die vollständigen Kontaktdaten
+          ergänzen wir im nächsten Schritt.
+        </p>
+      </div>
+    </section>
   </main>
+
+  <footer>
+    <div class="container">
+      <strong>Werkzeugverleih Wolter</strong>
+      <p>Werkzeugvermietung in Sondershausen</p>
+    </div>
+  </footer>
+
 </body>
 </html>
