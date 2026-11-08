@@ -1,0 +1,20 @@
+﻿id;kategorie;name;tag_eur;wochenende_eur;kaution_eur
+handkreissaege;Holz & Renovierung;Handkreissäge;15;25;50
+oberfraese;Holz & Renovierung;Oberfräse;16;26;50
+stichsaege-akku;Holz & Renovierung;Stichsäge (Akku);14;22;50
+exzenterschleifer-akku;Holz & Renovierung;Exzenterschleifer (Akku);12;20;40
+bohrhammer-akku;Bau & Allgemein;Bohrhammer (Akku);20;35;80
+winkelschleifer-akku;Bau & Allgemein;Winkelschleifer (Akku);17;;50
+winkelschleifer-gross;Bau & Allgemein;Winkelschleifer groß;20;;60
+doppelruehrwerk;Bau & Allgemein;Doppelrührwerk;20;35;80
+fliesenschneider;Bau & Allgemein;Fliesenschneider (bis 80 cm);16;26;60
+kreuzlinienlaser;Bau & Allgemein;Kreuzlinienlaser;18;30;80
+hochdruckreiniger;Bau & Allgemein;Hochdruckreiniger;20;35;80
+motorbruecke;KFZ & Spezialwerkzeuge;Motorbrücke;15;25;80
+motorkran;KFZ & Spezialwerkzeuge;Motorkran;30;55;120
+federspanner;KFZ & Spezialwerkzeuge;Federspanner;14;22;80
+gluehkerzen-ausbohrwerkzeug;KFZ & Spezialwerkzeuge;Glühkerzen Ausbohrwerkzeug;12;20;60
+ladeluft-abdruecksystem;KFZ & Spezialwerkzeuge;Ladeluft Abdrücksystem;14;22;80
+zahnriemen-werkzeug-vag;KFZ & Spezialwerkzeuge;Zahnriemen Werkzeug VAG Motoren;18;30;80
+bremsenentlueftungsgeraet;KFZ & Spezialwerkzeuge;Bremsenentlüftungsgerät;12;20;60
+bremsenrueckstellwerkzeug;KFZ & Spezialwerkzeuge;Bremsenrückstellwerkzeug;10;18;50
