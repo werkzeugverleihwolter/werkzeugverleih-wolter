@@ -46,6 +46,22 @@ async function ladeWerkzeuge() {
       )) {
         const karte = document.createElement("article");
         karte.className = "card";
+        
+if (werkzeug.name.toLowerCase().includes("motorkran")) {
+  const bild = document.createElement("img");
+
+  bild.src = "bilder/Motorkran.png";
+  bild.alt = "Motorkran – Werkzeugverleih Wolter";
+  bild.loading = "lazy";
+
+  bild.style.width = "100%";
+  bild.style.height = "220px";
+  bild.style.objectFit = "contain";
+  bild.style.marginBottom = "15px";
+
+  karte.appendChild(bild);
+}
+
 
         const name = document.createElement("h3");
         name.textContent = werkzeug.name;
