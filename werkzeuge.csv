@@ -1,4 +1,4 @@
-﻿id;kategorie;name;tag_eur;wochenende_eur;kaution_eur;bild
+id;kategorie;name;tag_eur;wochenende_eur;kaution_eur;bild;beschreibung;eigenschaften;details
 handkreissaege;Holz & Renovierung;Handkreissäge;15;25;50;bilder/Handkreissäge.png  
 oberfraese;Holz & Renovierung;Oberfräse;16;26;50;bilder/Oberfräse.png
 stichsaege-akku;Holz & Renovierung;Stichsäge (Akku);14;22;50;bilder/Stichsäge - Akku.png
