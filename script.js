@@ -12,6 +12,7 @@ async function ladeWerkzeuge() {
 
     const csv = (await antwort.text()).replace(/^\uFEFF/, "");
     const zeilen = csv.trim().split(/\r?\n/);
+
     const spalten = zeilen.shift()
       .split(";")
       .map(spalte => spalte.trim());
@@ -45,21 +46,54 @@ async function ladeWerkzeuge() {
       return text;
     }
 
+    // Merkt sich die aktuell geöffnete Kategorie
+    let offeneKategorie = null;
+
     for (const kategorie of kategorien) {
       const gruppe = document.createElement("div");
+      gruppe.style.marginBottom = "12px";
 
-      const titel = document.createElement("h3");
-      titel.textContent = kategorie;
-      titel.style.color = "#102b4c";
-      gruppe.appendChild(titel);
+      // Anklickbare Hauptkategorie
+      const kategorieButton = document.createElement("button");
+      kategorieButton.type = "button";
 
+      kategorieButton.style.width = "100%";
+      kategorieButton.style.padding = "22px";
+      kategorieButton.style.backgroundColor = "#102b4c";
+      kategorieButton.style.color = "#ffffff";
+      kategorieButton.style.border = "none";
+      kategorieButton.style.borderRadius = "10px";
+      kategorieButton.style.cursor = "pointer";
+      kategorieButton.style.fontSize = "19px";
+      kategorieButton.style.fontWeight = "600";
+      kategorieButton.style.textAlign = "left";
+      kategorieButton.style.display = "flex";
+      kategorieButton.style.justifyContent = "space-between";
+      kategorieButton.style.alignItems = "center";
+      kategorieButton.style.gap = "12px";
+
+      const kategorieName = document.createElement("span");
+      kategorieName.textContent = kategorie;
+
+      const pfeil = document.createElement("span");
+      pfeil.textContent = "▼";
+      pfeil.style.fontSize = "15px";
+
+      kategorieButton.appendChild(kategorieName);
+      kategorieButton.appendChild(pfeil);
+
+      // Container für die Werkzeugkarten
       const karten = document.createElement("div");
       karten.className = "grid";
+      karten.style.marginTop = "18px";
+      karten.style.marginBottom = "25px";
+      karten.style.display = "none";
 
       const gefilterteWerkzeuge = werkzeuge.filter(
         werkzeug => werkzeug.kategorie === kategorie
       );
 
+      // Werkzeugkarten wie bisher erstellen
       for (const werkzeug of gefilterteWerkzeuge) {
         const karte = document.createElement("article");
         karte.className = "card";
@@ -94,22 +128,16 @@ async function ladeWerkzeuge() {
           beschreibung.style.marginBottom = "15px";
         }
 
-        // Wichtigste Eigenschaften
+        // Eigenschaften
         if (werkzeug.eigenschaften) {
           const eigenschaften = document.createElement("ul");
 
           eigenschaften.style.paddingLeft = "20px";
           eigenschaften.style.marginBottom = "15px";
 
-          const punkte = werkzeug.eigenschaften.split("|");
-
-          for (const punkt of punkte) {
+          for (const punkt of werkzeug.eigenschaften.split("|")) {
             if (punkt.trim()) {
-              erstelleText(
-                "li",
-                punkt.trim(),
-                eigenschaften
-              );
+              erstelleText("li", punkt.trim(), eigenschaften);
             }
           }
 
@@ -150,9 +178,7 @@ async function ladeWerkzeuge() {
           details.style.backgroundColor = "#f2f5f9";
           details.style.borderRadius = "8px";
 
-          const zusammenfassung =
-            document.createElement("summary");
-
+          const zusammenfassung = document.createElement("summary");
           zusammenfassung.textContent = "Weitere Details";
           zusammenfassung.style.cursor = "pointer";
           zusammenfassung.style.fontWeight = "600";
@@ -164,15 +190,9 @@ async function ladeWerkzeuge() {
           detailListe.style.paddingLeft = "20px";
           detailListe.style.marginTop = "12px";
 
-          const punkte = werkzeug.details.split("|");
-
-          for (const punkt of punkte) {
+          for (const punkt of werkzeug.details.split("|")) {
             if (punkt.trim()) {
-              erstelleText(
-                "li",
-                punkt.trim(),
-                detailListe
-              );
+              erstelleText("li", punkt.trim(), detailListe);
             }
           }
 
@@ -183,6 +203,45 @@ async function ladeWerkzeuge() {
         karten.appendChild(karte);
       }
 
+      // Kategorie öffnen oder schließen
+      kategorieButton.setAttribute("aria-expanded", "false");
+
+      kategorieButton.addEventListener("click", () => {
+        const istOffen = karten.style.display !== "none";
+
+        // Vorherige Kategorie schließen
+        if (offeneKategorie && offeneKategorie !== karten) {
+          offeneKategorie.style.display = "none";
+
+          const vorherigerButton =
+            offeneKategorie.previousElementSibling;
+
+          if (vorherigerButton) {
+            vorherigerButton.setAttribute("aria-expanded", "false");
+
+            const vorherigerPfeil =
+              vorherigerButton.lastElementChild;
+
+            if (vorherigerPfeil) {
+              vorherigerPfeil.textContent = "▼";
+            }
+          }
+        }
+
+        if (istOffen) {
+          karten.style.display = "none";
+          pfeil.textContent = "▼";
+          kategorieButton.setAttribute("aria-expanded", "false");
+          offeneKategorie = null;
+        } else {
+          karten.style.display = "grid";
+          pfeil.textContent = "▲";
+          kategorieButton.setAttribute("aria-expanded", "true");
+          offeneKategorie = karten;
+        }
+      });
+
+      gruppe.appendChild(kategorieButton);
       gruppe.appendChild(karten);
       bereich.appendChild(gruppe);
     }
