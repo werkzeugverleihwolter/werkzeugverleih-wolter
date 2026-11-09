@@ -1,25 +1,21 @@
 
 async function ladeWerkzeuge() {
   const bereich = document.querySelector("#werkzeuge .grid");
-
   if (!bereich) return;
 
   try {
-    // CSV-Datei laden
     const antwort = await fetch("./werkzeuge.csv");
 
     if (!antwort.ok) {
       throw new Error("CSV-Datei konnte nicht geladen werden.");
     }
 
-    // CSV-Daten einlesen
     const csv = (await antwort.text()).replace(/^\uFEFF/, "");
     const zeilen = csv.trim().split(/\r?\n/);
-    const spalten = zeilen.shift().split(";").map(
-      spalte => spalte.trim()
-    );
+    const spalten = zeilen.shift()
+      .split(";")
+      .map(spalte => spalte.trim());
 
-    // Werkzeugdaten aus den Zeilen erstellen
     const werkzeuge = zeilen
       .filter(zeile => zeile.trim() !== "")
       .map(zeile => {
@@ -33,31 +29,33 @@ async function ladeWerkzeuge() {
         );
       });
 
-    // Kategorien ermitteln
     const kategorien = [...new Set(
       werkzeuge.map(werkzeug => werkzeug.kategorie)
     )];
 
-    // Bisherige Karten entfernen
     bereich.replaceChildren();
     bereich.style.gridTemplateColumns = "1fr";
 
     const formatPreis = wert => `${wert} €`;
 
-    // Kategorien erstellen
+    function erstelleText(element, inhalt, elternElement) {
+      const text = document.createElement(element);
+      text.textContent = inhalt;
+      elternElement.appendChild(text);
+      return text;
+    }
+
     for (const kategorie of kategorien) {
       const gruppe = document.createElement("div");
 
       const titel = document.createElement("h3");
       titel.textContent = kategorie;
       titel.style.color = "#102b4c";
-
       gruppe.appendChild(titel);
 
       const karten = document.createElement("div");
       karten.className = "grid";
 
-      // Werkzeuge der jeweiligen Kategorie
       const gefilterteWerkzeuge = werkzeuge.filter(
         werkzeug => werkzeug.kategorie === kategorie
       );
@@ -66,8 +64,8 @@ async function ladeWerkzeuge() {
         const karte = document.createElement("article");
         karte.className = "card";
 
-        // Werkzeugbild aus CSV-Datei laden
-        if (werkzeug.bild) {
+        // Werkzeugbild
+        if (werkzeug.bild && werkzeug.bild !== "bilder/") {
           const bild = document.createElement("img");
 
           bild.src = werkzeug.bild;
@@ -83,39 +81,103 @@ async function ladeWerkzeuge() {
         }
 
         // Werkzeugname
-        const name = document.createElement("h3");
-        name.textContent = werkzeug.name;
+        erstelleText("h3", werkzeug.name, karte);
 
-        karte.appendChild(name);
+        // Kurzbeschreibung
+        if (werkzeug.beschreibung) {
+          const beschreibung = erstelleText(
+            "p",
+            werkzeug.beschreibung,
+            karte
+          );
 
-        // Tagesmiete
+          beschreibung.style.marginBottom = "15px";
+        }
+
+        // Wichtigste Eigenschaften
+        if (werkzeug.eigenschaften) {
+          const eigenschaften = document.createElement("ul");
+
+          eigenschaften.style.paddingLeft = "20px";
+          eigenschaften.style.marginBottom = "15px";
+
+          const punkte = werkzeug.eigenschaften.split("|");
+
+          for (const punkt of punkte) {
+            if (punkt.trim()) {
+              erstelleText(
+                "li",
+                punkt.trim(),
+                eigenschaften
+              );
+            }
+          }
+
+          karte.appendChild(eigenschaften);
+        }
+
+        // Mietpreise
         if (werkzeug.tag_eur) {
-          const tag = document.createElement("p");
-
-          tag.textContent =
-            `Tagesmiete: ${formatPreis(werkzeug.tag_eur)}`;
-
-          karte.appendChild(tag);
+          erstelleText(
+            "p",
+            `Tagesmiete: ${formatPreis(werkzeug.tag_eur)}`,
+            karte
+          );
         }
 
-        // Wochenendmiete
         if (werkzeug.wochenende_eur) {
-          const wochenende = document.createElement("p");
-
-          wochenende.textContent =
-            `Wochenende: ${formatPreis(werkzeug.wochenende_eur)}`;
-
-          karte.appendChild(wochenende);
+          erstelleText(
+            "p",
+            `Wochenende: ${formatPreis(werkzeug.wochenende_eur)}`,
+            karte
+          );
         }
 
-        // Kaution
         if (werkzeug.kaution_eur) {
-          const kaution = document.createElement("p");
+          erstelleText(
+            "p",
+            `Kaution: ${formatPreis(werkzeug.kaution_eur)}`,
+            karte
+          );
+        }
 
-          kaution.textContent =
-            `Kaution: ${formatPreis(werkzeug.kaution_eur)}`;
+        // Aufklappbarer Detailbereich
+        if (werkzeug.details) {
+          const details = document.createElement("details");
 
-          karte.appendChild(kaution);
+          details.style.marginTop = "15px";
+          details.style.padding = "12px";
+          details.style.backgroundColor = "#f2f5f9";
+          details.style.borderRadius = "8px";
+
+          const zusammenfassung =
+            document.createElement("summary");
+
+          zusammenfassung.textContent = "Weitere Details";
+          zusammenfassung.style.cursor = "pointer";
+          zusammenfassung.style.fontWeight = "600";
+          zusammenfassung.style.color = "#102b4c";
+
+          details.appendChild(zusammenfassung);
+
+          const detailListe = document.createElement("ul");
+          detailListe.style.paddingLeft = "20px";
+          detailListe.style.marginTop = "12px";
+
+          const punkte = werkzeug.details.split("|");
+
+          for (const punkt of punkte) {
+            if (punkt.trim()) {
+              erstelleText(
+                "li",
+                punkt.trim(),
+                detailListe
+              );
+            }
+          }
+
+          details.appendChild(detailListe);
+          karte.appendChild(details);
         }
 
         karten.appendChild(karte);
@@ -133,5 +195,4 @@ async function ladeWerkzeuge() {
   }
 }
 
-// Werkzeugkatalog starten
 ladeWerkzeuge();
