@@ -4,23 +4,38 @@
 <head>
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="color-scheme" content="light">
+
   <meta name="description" content="Werkzeugverleih Wolter in Sondershausen. KFZ-Spezialwerkzeuge, Bau- und Elektrowerkzeuge mieten.">
+
   <title>Werkzeugverleih Wolter | Sondershausen</title>
+
   <style>
     :root {
+      color-scheme: light;
+
       --navy: #102b4c;
       --blue: #1768b3;
       --light: #f3f6fa;
       --text: #243348;
+      --white: #ffffff;
+      --border: #e0e7ef;
     }
 
-    * { box-sizing: border-box; }
+    * {
+      box-sizing: border-box;
+    }
+
+    html {
+      color-scheme: light;
+      scroll-behavior: smooth;
+    }
 
     body {
       margin: 0;
       font-family: Arial, sans-serif;
       color: var(--text);
-      background: white;
+      background-color: var(--white);
       line-height: 1.6;
     }
 
@@ -30,7 +45,7 @@
     }
 
     header {
-      background: white;
+      background-color: var(--white);
       border-bottom: 1px solid #e2e8f0;
     }
 
@@ -70,11 +85,13 @@
       font-weight: bold;
     }
 
-    nav a:hover { color: var(--blue); }
+    nav a:hover {
+      color: var(--blue);
+    }
 
     .hero {
       background: linear-gradient(120deg, #0b203a, #164574);
-      color: white;
+      color: #ffffff;
       padding: 95px 0;
     }
 
@@ -94,14 +111,16 @@
     .button {
       display: inline-block;
       padding: 14px 24px;
-      background: white;
+      background-color: #ffffff;
       color: var(--navy);
       text-decoration: none;
       border-radius: 7px;
       font-weight: bold;
     }
 
-    section { padding: 70px 0; }
+    section {
+      padding: 70px 0;
+    }
 
     h2 {
       color: var(--navy);
@@ -109,21 +128,25 @@
       margin-top: 0;
     }
 
-    .light { background: var(--light); }
+    .light {
+      background-color: var(--light);
+    }
 
     .grid {
       display: grid;
-      grid-template-columns: repeat(3, 1fr);
+      grid-template-columns: repeat(3, minmax(0, 1fr));
       gap: 24px;
       margin-top: 30px;
     }
 
     .card {
-      background: white;
+      background-color: var(--white);
+      color: var(--text);
       padding: 30px;
-      border: 1px solid #e0e7ef;
+      border: 1px solid var(--border);
       border-radius: 12px;
       box-shadow: 0 4px 18px #102b4c0a;
+      min-width: 0;
     }
 
     .card h3 {
@@ -131,13 +154,28 @@
       margin-top: 0;
     }
 
+    .card img {
+      max-width: 100%;
+      height: auto;
+    }
+
+    .card a {
+      overflow-wrap: anywhere;
+    }
+
     footer {
-      background: #0b203a;
-      color: white;
+      background-color: #0b203a;
+      color: #ffffff;
       padding: 35px 0;
     }
 
-    footer p { margin: 5px 0; }
+    footer p {
+      margin: 5px 0;
+    }
+
+    footer a {
+      color: #ffffff;
+    }
 
     @media (max-width: 700px) {
       .header-inner {
@@ -150,16 +188,34 @@
         height: 62px;
       }
 
-      nav { gap: 14px; }
-      .hero { padding: 65px 0; }
-      .grid { grid-template-columns: 1fr; }
+      nav {
+        gap: 14px;
+      }
+
+      .hero {
+        padding: 65px 0;
+      }
+
+      .grid {
+        grid-template-columns: 1fr;
+      }
+
+      .card {
+        padding: 24px;
+      }
+
+      section {
+        padding: 50px 0;
+      }
     }
   </style>
 </head>
+
 <body>
 
   <header>
     <div class="container header-inner">
+
       <a class="brand" href="#start">
         <img src="Logo.png" alt="Logo Werkzeugverleih Wolter">
         <span>Werkzeugverleih Wolter</span>
@@ -171,29 +227,40 @@
         <a href="#ablauf">Mietablauf</a>
         <a href="#kontakt">Kontakt</a>
       </nav>
+
     </div>
   </header>
 
   <main>
+
     <div class="hero" id="start">
       <div class="container">
+
         <h1>Werkzeug benötigt? Einfach mieten statt kaufen!</h1>
+
         <p>
           Werkzeugverleih Wolter in Sondershausen.
           Miete Werkzeuge und Maschinen für dein nächstes Projekt.
         </p>
+
         <a class="button" href="#werkzeuge">
           Werkzeuge entdecken
         </a>
+
       </div>
     </div>
 
     <section class="light" id="werkzeuge">
       <div class="container">
+
         <h2>Unsere Werkzeugkategorien</h2>
-        <p>Entdecke unser Angebot für verschiedene Einsatzbereiche.</p>
+
+        <p>
+          Entdecke unser Angebot für verschiedene Einsatzbereiche.
+        </p>
 
         <div class="grid">
+
           <div class="card">
             <h3>KFZ-Spezialwerkzeuge</h3>
             <p>
@@ -217,107 +284,127 @@
               für deine Holzprojekte.
             </p>
           </div>
+
         </div>
+
       </div>
     </section>
 
     <section id="ablauf">
       <div class="container">
+
         <h2>So funktioniert die Vermietung</h2>
+
         <div class="grid">
+
           <div class="card">
             <h3>1. Werkzeug auswählen</h3>
-            <p>Suche das passende Gerät für dein Vorhaben.</p>
+            <p>
+              Suche das passende Gerät für dein Vorhaben.
+            </p>
           </div>
+
           <div class="card">
             <h3>2. Anfrage stellen</h3>
-            <p>Kontaktiere uns und kläre die Verfügbarkeit.</p>
+            <p>
+              Kontaktiere uns und kläre die Verfügbarkeit.
+            </p>
           </div>
+
           <div class="card">
             <h3>3. Werkzeug abholen</h3>
-            <p>Hole dein Werkzeug zum vereinbarten Termin ab.</p>
+            <p>
+              Hole dein Werkzeug zum vereinbarten Termin ab.
+            </p>
           </div>
+
         </div>
+
       </div>
     </section>
 
-   
-<section class="light" id="kontakt">
-  <div class="container">
-    <h2>Kontakt & Mietanfrage</h2>
+    <section class="light" id="kontakt">
+      <div class="container">
 
-    <p>
-      Du benötigst ein Werkzeug?
-      Kontaktiere mich telefonisch oder per E-Mail,
-      um die Verfügbarkeit und einen Abholtermin
-      zu vereinbaren.
-    </p>
+        <h2>Kontakt & Mietanfrage</h2>
 
-    <div class="grid">
-      <div class="card">
-        <h3>Telefon</h3>
         <p>
-          <a href="tel:+4915234174361">
-            0152 34174361
-          </a>
+          Du benötigst ein Werkzeug?
+          Kontaktiere mich telefonisch oder per E-Mail,
+          um die Verfügbarkeit und einen Abholtermin
+          zu vereinbaren.
         </p>
+
+        <div class="grid">
+
+          <div class="card">
+            <h3>Telefon</h3>
+            <p>
+              <a href="tel:+4915234174361">
+                0152 34174361
+              </a>
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>E-Mail</h3>
+            <p>
+              <a href="mailto:werkzeugverleih.wolter@gmail.com">
+                werkzeugverleih.wolter@gmail.com
+              </a>
+            </p>
+          </div>
+
+          <div class="card">
+            <h3>Standort</h3>
+            <p>
+              Sondershausen, Thüringen
+            </p>
+          </div>
+
+        </div>
+
+        <div class="card" style="margin-top: 24px;">
+
+          <h3>Abholung und Rückgabe nach Vereinbarung</h3>
+
+          <p>
+            Mietanfragen sind telefonisch oder
+            per E-Mail möglich. Abhol- und
+            Rückgabetermine werden individuell
+            vereinbart.
+          </p>
+
+        </div>
+
       </div>
-
-      <div class="card">
-        <h3>E-Mail</h3>
-        <p>
-          <a href="mailto:werkzeugverleih.wolter@gmail.com"
-             style="overflow-wrap: anywhere;">
-            werkzeugverleih.wolter@gmail.com
-          </a>
-        </p>
-      </div>
-
-      <div class="card">
-        <h3>Standort</h3>
-        <p>Sondershausen, Thüringen</p>
-      </div>
-    </div>
-
-    <div class="card" style="margin-top: 24px;">
-      <h3>Abholung und Rückgabe nach Vereinbarung</h3>
-
-      <p>
-        Mietanfragen sind telefonisch oder
-        per E-Mail möglich. Abhol- und
-        Rückgabetermine werden individuell
-        vereinbart.
-      </p>
-    </div>
-  </div>
-</section>
+    </section>
 
   </main>
 
- 
+  <footer>
+    <div class="container">
 
-<footer>
-  <div class="container">
-    <p>&copy; Werkzeugverleih Wolter</p>
+      <p>&copy; Werkzeugverleih Wolter</p>
 
-    <p>
-      <a href="impressum.html"
-         style="color: white; text-decoration: underline;">
-        Impressum
-      </a>
+      <p>
+        <a href="impressum.html"
+           style="text-decoration: underline;">
+          Impressum
+        </a>
 
-      <span style="margin: 0 12px;">|</span>
+        <span style="margin: 0 12px;">|</span>
 
-      <a href="datenschutz.html"
-         style="color: white; text-decoration: underline;">
-        Datenschutz
-      </a>
-    </p>
-  </div>
-</footer>
+        <a href="datenschutz.html"
+           style="text-decoration: underline;">
+          Datenschutz
+        </a>
+      </p>
 
+    </div>
+  </footer>
 
-  
-<script src="script.js"></script>
+  <script src="script.js"></script>
+
 </body>
 </html>
