@@ -230,6 +230,28 @@
       background: #fff;
       cursor: pointer;
     }
+    .mietkorb-zeitraum {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin: 18px 0;
+    }
+    .mietkorb-zeitraum label { display: grid; gap: 5px; font-weight: 700; }
+    .mietkorb-zeitraum input {
+      width: 100%;
+      min-width: 0;
+      padding: 9px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      font: inherit;
+    }
+    .mietkorb-preis {
+      padding: 12px;
+      border-radius: 8px;
+      background: var(--light);
+      margin: 14px 0;
+    }
+    .mietkorb-preis p { margin: 5px 0; }
     .mietkorb-dialog-kopf {
       display: flex;
       justify-content: space-between;
@@ -514,7 +536,16 @@
     </div>
     <p id="warenkorb-leer">Noch keine Werkzeuge ausgewählt.</p>
     <ul id="warenkorb-liste" aria-live="polite"></ul>
-    <p id="warenkorb-hinweis">Die Auswahl ist noch keine Reservierung. Mietzeitraum und Anfrageformular folgen im nächsten Schritt.</p>
+    <div class="mietkorb-zeitraum">
+      <label for="mietbeginn">Mietbeginn
+        <input id="mietbeginn" type="date">
+      </label>
+      <label for="mietende">Rückgabe
+        <input id="mietende" type="date">
+      </label>
+    </div>
+    <div id="mietkorb-preis" class="mietkorb-preis" aria-live="polite">Wähle Werkzeuge und den Mietzeitraum aus, um die voraussichtlichen Kosten zu sehen.</div>
+    <p id="warenkorb-hinweis">Unverbindliche Preisübersicht – keine Reservierung und kein Versand. Verfügbarkeit und Rückgabetermin werden erst nach einer Anfrage bestätigt. Eine Kaution wird separat ausgewiesen.</p>
   </dialog>
 
   <script src="script.js"></script>
