@@ -257,6 +257,22 @@
       margin: 14px 0;
     }
     .mietkorb-preis p { margin: 5px 0; }
+    .mietkorb-anfrage { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
+    .mietkorb-anfrage h3 { color: var(--navy); margin: 0 0 10px; }
+    .mietkorb-anfrage label { display: grid; gap: 5px; margin: 12px 0; font-weight: 700; }
+    .mietkorb-anfrage input, .mietkorb-anfrage textarea {
+      width: 100%; min-width: 0; padding: 10px; border: 1px solid var(--border);
+      border-radius: 7px; font: inherit; font-weight: 400;
+    }
+    .mietkorb-anfrage button[type="submit"] {
+      width: 100%; padding: 13px; margin-top: 12px; border: 0;
+      border-radius: 8px; background: var(--blue); color: #fff;
+      font: inherit; font-weight: 700; cursor: pointer;
+    }
+    .mietkorb-anfrage button[type="submit"]:disabled { background: #a9b3bf; cursor: not-allowed; }
+    .mietkorb-anfrage-status { margin-top: 10px; }
+    .mietkorb-anfrage-status[role="alert"] { color: #a02020; }
+    .mietkorb-anfrage-status[data-erfolg="true"] { color: #14653b; font-weight: 700; }
     .mietkorb-dialog-kopf {
       display: flex;
       justify-content: space-between;
@@ -554,7 +570,26 @@
       </label>
     </div>
     <p><strong>Kostenlose Vorabendabholung:</strong> Du benötigst das Werkzeug bereits am Morgen? Nach vorheriger Vereinbarung kannst du es kostenlos am Vorabend abholen. Der Vorabend zählt nicht als zusätzlicher Miettag.</p>
-    <p id="warenkorb-hinweis">Unverbindliche Preisübersicht – keine Reservierung und kein Versand. Verfügbarkeit sowie Abhol- und Rückgabetermine werden erst nach einer Anfrage bestätigt. Die Kaution wird separat ausgewiesen.</p>
+    <p id="warenkorb-hinweis">Unverbindliche Preisübersicht – keine Reservierung. Verfügbarkeit sowie Abhol- und Rückgabetermine werden erst nach Prüfung der Anfrage bestätigt. Die Kaution wird separat ausgewiesen.</p>
+    <form id="mietkorb-anfrage" class="mietkorb-anfrage">
+      <h3>Deine Kontaktdaten</h3>
+      <p>Pflichtfelder sind mit * gekennzeichnet.</p>
+      <label for="anfrage-name">Vor- und Nachname *
+        <input id="anfrage-name" name="name" type="text" autocomplete="name" maxlength="120" required>
+      </label>
+      <label for="anfrage-telefon">Telefonnummer *
+        <input id="anfrage-telefon" name="telefon" type="tel" autocomplete="tel" maxlength="40" required>
+      </label>
+      <label for="anfrage-email">E-Mail-Adresse *
+        <input id="anfrage-email" name="email" type="email" autocomplete="email" maxlength="254" required>
+      </label>
+      <label for="anfrage-nachricht">Zusätzliche Nachricht (optional)
+        <textarea id="anfrage-nachricht" name="nachricht" rows="3" maxlength="2000"></textarea>
+      </label>
+      <p>Mit dem Absenden werden deine Angaben zur Bearbeitung der unverbindlichen Mietanfrage über Formspree übermittelt. Informationen zur Datenverarbeitung findest du in unserer <a href="datenschutz.html" target="_blank" rel="noopener noreferrer">Datenschutzerklärung</a>. Die Verfügbarkeit wird erst persönlich bestätigt.</p>
+      <button id="anfrage-absenden" type="submit" disabled>Mietanfrage absenden</button>
+      <p id="anfrage-status" class="mietkorb-anfrage-status" aria-live="polite"></p>
+    </form>
   </dialog>
 
   <script src="script.js"></script>
