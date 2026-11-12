@@ -39,6 +39,44 @@ async function ladeWerkzeuge() {
 
     const formatPreis = wert => `${wert} €`;
 
+    // Auswahl nur im aktuellen Seitenaufruf; noch keine Buchung oder Anfrage.
+    const auswahl = new Map();
+    const warenkorb = document.getElementById("anfrage-warenkorb");
+    const warenkorbListe = document.getElementById("warenkorb-liste");
+    const warenkorbAnzahl = document.getElementById("warenkorb-anzahl");
+    const warenkorbLeer = document.getElementById("warenkorb-leer");
+    const auswahlButtons = new Map();
+
+    function aktualisiereWarenkorb() {
+      warenkorbListe.replaceChildren();
+      warenkorbAnzahl.textContent = String(auswahl.size);
+      warenkorbLeer.hidden = auswahl.size > 0;
+
+      for (const [id, name] of auswahl) {
+        const eintrag = document.createElement("li");
+        const beschriftung = document.createElement("span");
+        beschriftung.textContent = name;
+        eintrag.appendChild(beschriftung);
+
+        const entfernen = document.createElement("button");
+        entfernen.type = "button";
+        entfernen.textContent = "Entfernen";
+        entfernen.setAttribute("aria-label", name + " aus dem Warenkorb entfernen");
+        entfernen.addEventListener("click", () => {
+          auswahl.delete(id);
+          aktualisiereWarenkorb();
+        });
+        eintrag.appendChild(entfernen);
+        warenkorbListe.appendChild(eintrag);
+      }
+
+      for (const [id, button] of auswahlButtons) {
+        const gewaehlt = auswahl.has(id);
+        button.textContent = gewaehlt ? "Auswahl entfernen" : "Jetzt mieten";
+        button.setAttribute("aria-pressed", String(gewaehlt));
+      }
+    }
+
     function erstelleText(element, inhalt, elternElement) {
       const text = document.createElement(element);
       text.textContent = inhalt;
@@ -94,7 +132,7 @@ async function ladeWerkzeuge() {
       );
 
       // Werkzeugkarten wie bisher erstellen
-      for (const werkzeug of gefilterteWerkzeuge) {
+      for (const [werkzeugIndex, werkzeug] of gefilterteWerkzeuge.entries()) {
         const karte = document.createElement("article");
         karte.className = "card";
 
@@ -168,6 +206,25 @@ async function ladeWerkzeuge() {
             karte
           );
         }
+
+        // Button oberhalb der weiteren Details.
+        const werkzeugId = kategorie + "::" + werkzeugIndex;
+        const mietenButton = document.createElement("button");
+        mietenButton.type = "button";
+        mietenButton.className = "mietanfrage-button";
+        mietenButton.textContent = "Jetzt mieten";
+        mietenButton.setAttribute("aria-pressed", "false");
+        mietenButton.setAttribute("aria-label", werkzeug.name + " zur Mietanfrage hinzufügen");
+        mietenButton.addEventListener("click", () => {
+          if (auswahl.has(werkzeugId)) {
+            auswahl.delete(werkzeugId);
+          } else {
+            auswahl.set(werkzeugId, werkzeug.name);
+          }
+          aktualisiereWarenkorb();
+        });
+        auswahlButtons.set(werkzeugId, mietenButton);
+        karte.appendChild(mietenButton);
 
         // Aufklappbarer Detailbereich
         if (werkzeug.details) {
