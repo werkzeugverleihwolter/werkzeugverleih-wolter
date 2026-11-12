@@ -162,6 +162,143 @@
       overflow-wrap: anywhere;
     }
 
+    .mietanfrage-button {
+      display: inline-block;
+      width: 100%;
+      padding: 12px 16px;
+      margin-top: 16px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--blue);
+      color: #fff;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .mietanfrage-button[aria-pressed="true"] {
+      background: var(--navy);
+    }
+
+    .mietkorb-trigger {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 12px;
+      border: 1px solid var(--border);
+      border-radius: 9px;
+      background: #f3f6fa;
+      color: var(--navy);
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
+    }
+
+    .mietkorb-trigger svg { width: 23px; height: 23px; }
+    .mietkorb-anzahl {
+      min-width: 23px;
+      padding: 1px 6px;
+      border-radius: 999px;
+      background: var(--blue);
+      color: #fff;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    .mietkorb-dialog {
+      width: min(680px, calc(100% - 24px));
+      max-height: min(85vh, 700px);
+      margin: auto;
+      padding: 24px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: 0 16px 48px #102b4c44;
+      color: var(--text);
+    }
+
+    .mietkorb-dialog::backdrop { background: #102b4c88; }
+    .mietkorb-dialog h2 { font-size: 24px; margin: 0; }
+    .mietkorb-dialog ul { padding: 0; list-style: none; }
+    .mietkorb-dialog li { margin: 12px 0; padding: 14px; border: 1px solid var(--border); border-radius: 9px; }
+    .mietkorb-position { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; }
+    .mietkorb-position-name { font-weight: 700; color: var(--navy); }
+    .mietkorb-position-preise { text-align: right; white-space: nowrap; font-size: 14px; }
+    .mietkorb-position-preise div { display: flex; justify-content: space-between; gap: 12px; }
+    .mietkorb-position-summe { font-weight: 700; color: var(--navy); }
+    .mietkorb-dialog li button {
+      margin-top: 10px;
+      padding: 5px 9px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #fff;
+      cursor: pointer;
+    }
+    .mietkorb-zeitraum {
+      display: grid;
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      gap: 12px;
+      margin: 18px 0;
+    }
+    .mietkorb-zeitraum label { display: grid; gap: 5px; font-weight: 700; }
+    .mietkorb-zeitraum input {
+      width: 100%;
+      min-width: 0;
+      padding: 9px;
+      border: 1px solid var(--border);
+      border-radius: 7px;
+      font: inherit;
+    }
+    .mietkorb-preis {
+      padding: 12px;
+      border-radius: 8px;
+      background: var(--light);
+      margin: 14px 0;
+    }
+    .mietkorb-preis p { margin: 5px 0; }
+    .mietkorb-anfrage { margin-top: 20px; padding-top: 16px; border-top: 1px solid var(--border); }
+    .mietkorb-anfrage h3 { color: var(--navy); margin: 0 0 10px; }
+    .mietkorb-anfrage label { display: grid; gap: 5px; margin: 12px 0; font-weight: 700; }
+    .mietkorb-anfrage input, .mietkorb-anfrage textarea {
+      width: 100%; min-width: 0; padding: 10px; border: 1px solid var(--border);
+      border-radius: 7px; font: inherit; font-weight: 400;
+    }
+    .mietkorb-anfrage button[type="submit"] {
+      width: 100%; padding: 13px; margin-top: 12px; border: 0;
+      border-radius: 8px; background: var(--blue); color: #fff;
+      font: inherit; font-weight: 700; cursor: pointer;
+    }
+    .mietkorb-anfrage button[type="submit"]:disabled { background: #a9b3bf; cursor: not-allowed; }
+    .mietkorb-anfrage-fehler { margin: 14px 0; padding: 12px 14px; border: 1px solid #e9b5b5; border-radius: 8px; background: #fff5f5; color: #842525; }
+    .mietkorb-anfrage-fehler p { margin: 0 0 6px; font-weight: 700; }
+    .mietkorb-anfrage-fehler ul { list-style: disc; padding-left: 20px; margin: 0; }
+    .mietkorb-anfrage-fehler li { margin: 3px 0; padding: 0; border: 0; border-radius: 0; }
+    .mietkorb-anfrage-status { margin-top: 10px; }
+    .mietkorb-anfrage-status[role="alert"] { color: #a02020; }
+    .mietkorb-anfrage-status[data-erfolg="true"] { color: #14653b; font-weight: 700; }
+    .mietkorb-dialog-kopf {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    .mietkorb-schliessen {
+      padding: 6px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #fff;
+      font: inherit;
+      cursor: pointer;
+    }
+    @media (max-width: 700px) {
+      .mietkorb-dialog { margin: auto; padding: 20px; }
+      .mietkorb-trigger-text { display: none; }
+      .mietkorb-trigger { margin-left: auto; }
+      .mietkorb-position { grid-template-columns: 1fr; }
+      .mietkorb-position-preise { text-align: left; white-space: normal; }
+    }
+
     footer {
       background-color: #0b203a;
       color: #ffffff;
@@ -226,6 +363,15 @@
         <a href="#ablauf">Mietablauf</a>
         <a href="#kontakt">Kontakt</a>
       </nav>
+
+      <button id="mietkorb-oeffnen" class="mietkorb-trigger" type="button" aria-haspopup="dialog" aria-controls="mietkorb-dialog" aria-label="Mietkorb öffnen, 0 Werkzeuge">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle>
+          <path d="M1 1h4l2.5 13h12l2.5-9H6"></path>
+        </svg>
+        <span class="mietkorb-trigger-text">Mietkorb</span>
+        <span id="mietkorb-anzahl" class="mietkorb-anzahl" aria-hidden="true">0</span>
+      </button>
 
     </div>
   </header>
@@ -320,7 +466,7 @@
           <div class="card">
             <h3>3. Werkzeug abholen</h3>
             <p>
-              Hole dein Werkzeug zum vereinbarten Termin ab.
+              Hole dein Werkzeug zum vereinbarten Termin ab. Nach vorheriger Vereinbarung ist die Abholung am Vorabend kostenlos möglich und zählt nicht als zusätzlicher Miettag.
             </p>
           </div>
 
@@ -372,14 +518,16 @@
 
         <div class="card" style="margin-top: 24px;">
 
-          <h3>Abholung und Rückgabe nach Vereinbarung</h3>
+          <h3>Abholung und Rückgabe</h3>
 
-          <p>
-            Mietanfragen sind telefonisch oder
-            per E-Mail möglich. Abhol- und
-            Rückgabetermine werden individuell
-            vereinbart.
-          </p>
+          <p>Reguläre Abhol- und Rückgabezeiten:</p>
+          <ul>
+            <li>Montag bis Donnerstag: 17:30–19:00 Uhr</li>
+            <li>Freitag: 13:00–20:00 Uhr</li>
+            <li>Samstag: 09:00–12:00 Uhr</li>
+          </ul>
+          <p>Außerhalb dieser Zeiten nur nach vorheriger Vereinbarung. Keine Anlieferung – Abholung und Rückgabe erfolgen an unserem Standort in Sondershausen.</p>
+          <p>Mietanfragen und Terminabsprachen sind unverbindlich. Der Mietvertrag kommt erst bei der persönlichen Übergabe durch Unterzeichnung des Vertragsdokuments zustande. Die AGB werden vor der Unterschrift zur Verfügung gestellt.</p>
 
         </div>
 
@@ -405,10 +553,55 @@
            style="text-decoration: underline;">
           Datenschutz
         </a>
+
+        <span style="margin: 0 12px;">|</span>
+
+        <a href="agb.html" style="text-decoration: underline;">AGB</a>
       </p>
 
     </div>
   </footer>
+
+  <dialog id="mietkorb-dialog" class="mietkorb-dialog" aria-labelledby="mietkorb-titel">
+    <div class="mietkorb-dialog-kopf">
+      <h2 id="mietkorb-titel">Dein Mietkorb</h2>
+      <button id="mietkorb-schliessen" class="mietkorb-schliessen" type="button" aria-label="Mietkorb schließen">Schließen</button>
+    </div>
+    <p id="warenkorb-leer">Noch keine Werkzeuge ausgewählt.</p>
+    <ul id="warenkorb-liste" aria-live="polite"></ul>
+    <div id="mietkorb-preis" class="mietkorb-preis" aria-live="polite">Wähle Werkzeuge und den Mietzeitraum aus, um die voraussichtlichen Kosten zu sehen.</div>
+    <h3>Mietzeitraum</h3>
+    <div class="mietkorb-zeitraum">
+      <label for="mietbeginn">Mietbeginn
+        <input id="mietbeginn" type="date">
+      </label>
+      <label for="mietende">Rückgabe
+        <input id="mietende" type="date">
+      </label>
+    </div>
+    <p><strong>Kostenlose Vorabendabholung:</strong> Du benötigst das Werkzeug bereits am Morgen? Nach vorheriger Vereinbarung kannst du es kostenlos am Vorabend abholen. Der Vorabend zählt nicht als zusätzlicher Miettag.</p>
+    <p id="warenkorb-hinweis">Unverbindliche Preisübersicht – keine Reservierung. Verfügbarkeit sowie Abhol- und Rückgabetermine werden erst nach Prüfung der Anfrage bestätigt. Die Kaution wird separat ausgewiesen.</p>
+    <form id="mietkorb-anfrage" class="mietkorb-anfrage">
+      <h3>Deine Kontaktdaten</h3>
+      <p>Pflichtfelder sind mit * gekennzeichnet.</p>
+      <label for="anfrage-name">Vor- und Nachname *
+        <input id="anfrage-name" name="name" type="text" autocomplete="name" maxlength="120" required>
+      </label>
+      <label for="anfrage-telefon">Telefonnummer *
+        <input id="anfrage-telefon" name="telefon" type="tel" autocomplete="tel" maxlength="40" required>
+      </label>
+      <label for="anfrage-email">E-Mail-Adresse *
+        <input id="anfrage-email" name="email" type="email" autocomplete="email" maxlength="254" required>
+      </label>
+      <label for="anfrage-nachricht">Zusätzliche Nachricht (optional)
+        <textarea id="anfrage-nachricht" name="nachricht" rows="3" maxlength="2000"></textarea>
+      </label>
+      <p>Mit dem Absenden werden deine Angaben zur Bearbeitung der unverbindlichen Mietanfrage über Form.taxi übermittelt. Informationen zur Datenverarbeitung findest du in unserer <a href="datenschutz.html" target="_blank" rel="noopener noreferrer">Datenschutzerklärung</a>. Die Verfügbarkeit wird erst persönlich bestätigt.</p>
+      <div id="anfrage-fehler" class="mietkorb-anfrage-fehler" aria-live="polite" aria-atomic="true" hidden></div>
+      <button id="anfrage-absenden" type="submit" disabled>Mietanfrage absenden</button>
+      <p id="anfrage-status" class="mietkorb-anfrage-status" aria-live="polite"></p>
+    </form>
+  </dialog>
 
   <script src="script.js"></script>
 
