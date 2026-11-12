@@ -48,6 +48,94 @@ async function ladeWerkzeuge() {
     const warenkorbAnzahl = document.getElementById("mietkorb-anzahl");
     const warenkorbLeer = document.getElementById("warenkorb-leer");
     const auswahlButtons = new Map();
+    const mietbeginn = document.getElementById("mietbeginn");
+    const mietende = document.getElementById("mietende");
+    const preisAnzeige = document.getElementById("mietkorb-preis");
+    const euro = betrag => new Intl.NumberFormat("de-DE", {
+      style: "currency", currency: "EUR"
+    }).format(betrag);
+    const alsDatum = wert => {
+      if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(wert)) return null;
+      const [jahr, monat, tag] = wert.split("-").map(Number);
+      const datum = new Date(Date.UTC(jahr, monat - 1, tag));
+      return datum.getUTCFullYear() === jahr && datum.getUTCMonth() === monat - 1 &&
+        datum.getUTCDate() === tag ? datum : null;
+    };
+    const einTag = 86400000;
+
+    // Wochenendpauschale: Samstag bis Montag (Montag ist Rückgabetag).
+    // Zusätzliche Tage außerhalb des Wochenendblocks zählen als Tagesmiete.
+    function berechnePreis(werkzeug, start, ende) {
+      const tagespreis = Number(werkzeug.tag_eur);
+      const wochenendpreis = Number(werkzeug.wochenende_eur);
+      if (!Number.isFinite(tagespreis) || tagespreis < 0) return null;
+      let gesamt = 0;
+      let tage = 0;
+      let wochenenden = 0;
+      for (let zeit = start.getTime(); zeit <= ende.getTime();) {
+        const datum = new Date(zeit);
+        const istSamstag = datum.getUTCDay() === 6;
+        const montag = zeit + 2 * einTag;
+        if (istSamstag && montag <= ende.getTime() &&
+            werkzeug.wochenende_eur !== "" && Number.isFinite(wochenendpreis) &&
+            wochenendpreis >= 0) {
+          gesamt += wochenendpreis;
+          wochenenden++;
+          zeit += 3 * einTag;
+        } else {
+          gesamt += tagespreis;
+          tage++;
+          zeit += einTag;
+        }
+      }
+      return { gesamt, tage, wochenenden };
+    }
+
+    function aktualisierePreis() {
+      preisAnzeige.replaceChildren();
+      const hinweis = text => {
+        const p = document.createElement("p");
+        p.textContent = text;
+        preisAnzeige.appendChild(p);
+      };
+      if (auswahl.size === 0) {
+        hinweis("Wähle zunächst mindestens ein Werkzeug aus.");
+        return;
+      }
+      const start = alsDatum(mietbeginn.value);
+      const ende = alsDatum(mietende.value);
+      if (!start || !ende) {
+        hinweis("Bitte Mietbeginn und Rückgabedatum auswählen.");
+        return;
+      }
+      if (ende < start) {
+        hinweis("Das Rückgabedatum darf nicht vor dem Mietbeginn liegen.");
+        return;
+      }
+      // Samstag bis Sonntag ist kein vollständiger Wochenendzeitraum:
+      // Bei Wochenendmiete erfolgt die Rückgabe am Montag.
+      if (start.getUTCDay() === 6 && ende.getTime() === start.getTime() + einTag) {
+        hinweis("Bei einer Wochenendmiete erfolgt die Rückgabe am Montag. Bitte Montag als Rückgabedatum auswählen.");
+        return;
+      }
+      let gesamt = 0;
+      let kaution = 0;
+      for (const werkzeug of auswahl.values()) {
+        const preis = berechnePreis(werkzeug, start, ende);
+        if (!preis) {
+          hinweis("Für mindestens ein Werkzeug fehlt ein gültiger Tagespreis. Eine Gesamtsumme ist nicht möglich.");
+          return;
+        }
+        gesamt += preis.gesamt;
+        const k = Number(werkzeug.kaution_eur);
+        if (werkzeug.kaution_eur !== "" && Number.isFinite(k) && k >= 0) kaution += k;
+      }
+      hinweis("Voraussichtliche Mietkosten: " + euro(gesamt));
+      hinweis("Hinterlegte Kautionen insgesamt: " + euro(kaution) + " (zusätzlich, nicht Teil der Mietkosten)");
+      hinweis("Berechnung: Tagespreise und gegebenenfalls Wochenendpauschalen. Rückgabe am Montag bei Wochenendmiete.");
+    }
+    mietbeginn.addEventListener("change", aktualisiereWarenkorb);
+    mietende.addEventListener("change", aktualisiereWarenkorb);
 
     mietkorbOeffnen.addEventListener("click", () => mietkorbDialog.showModal());
     mietkorbSchliessen.addEventListener("click", () => mietkorbDialog.close());
@@ -67,11 +155,25 @@ async function ladeWerkzeuge() {
       mietkorbOeffnen.setAttribute("aria-label", "Mietkorb öffnen, " + auswahl.size + " Werkzeuge");
       warenkorbLeer.hidden = auswahl.size > 0;
 
-      for (const [id, name] of auswahl) {
+      for (const [id, werkzeug] of auswahl) {
+        const name = werkzeug.name;
         const eintrag = document.createElement("li");
         const beschriftung = document.createElement("span");
         beschriftung.textContent = name;
         eintrag.appendChild(beschriftung);
+        const preise = document.createElement("div");
+        preise.textContent = "Tagesmiete: " + euro(Number(werkzeug.tag_eur)) +
+          (werkzeug.wochenende_eur ? " · Wochenende: " + euro(Number(werkzeug.wochenende_eur)) : "");
+        eintrag.appendChild(preise);
+        const einzelpreis = document.createElement("div");
+        const start = alsDatum(mietbeginn.value);
+        const ende = alsDatum(mietende.value);
+        if (start && ende && ende >= start &&
+            !(start.getUTCDay() === 6 && ende.getTime() === start.getTime() + einTag)) {
+          const berechnung = berechnePreis(werkzeug, start, ende);
+          if (berechnung) einzelpreis.textContent = "Mietpreis für Zeitraum: " + euro(berechnung.gesamt);
+        }
+        eintrag.appendChild(einzelpreis);
 
         const entfernen = document.createElement("button");
         entfernen.type = "button";
@@ -84,6 +186,8 @@ async function ladeWerkzeuge() {
         eintrag.appendChild(entfernen);
         warenkorbListe.appendChild(eintrag);
       }
+
+      aktualisierePreis();
 
       for (const [id, button] of auswahlButtons) {
         const gewaehlt = auswahl.has(id);
@@ -234,7 +338,7 @@ async function ladeWerkzeuge() {
           if (auswahl.has(werkzeugId)) {
             auswahl.delete(werkzeugId);
           } else {
-            auswahl.set(werkzeugId, werkzeug.name);
+            auswahl.set(werkzeugId, werkzeug);
           }
           aktualisiereWarenkorb();
         });
