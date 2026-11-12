@@ -55,7 +55,7 @@ async function ladeWerkzeuge() {
       style: "currency", currency: "EUR"
     }).format(betrag);
     const alsDatum = wert => {
-      if (!/^\\d{4}-\\d{2}-\\d{2}$/.test(wert)) return null;
+      if (!/^\d{4}-\d{2}-\d{2}$/.test(wert)) return null;
       const [jahr, monat, tag] = wert.split("-").map(Number);
       const datum = new Date(Date.UTC(jahr, monat - 1, tag));
       return datum.getUTCFullYear() === jahr && datum.getUTCMonth() === monat - 1 &&
@@ -158,22 +158,38 @@ async function ladeWerkzeuge() {
       for (const [id, werkzeug] of auswahl) {
         const name = werkzeug.name;
         const eintrag = document.createElement("li");
-        const beschriftung = document.createElement("span");
+        const position = document.createElement("div");
+        position.className = "mietkorb-position";
+        const links = document.createElement("div");
+        const beschriftung = document.createElement("div");
+        beschriftung.className = "mietkorb-position-name";
         beschriftung.textContent = name;
-        eintrag.appendChild(beschriftung);
+        links.appendChild(beschriftung);
+        position.appendChild(links);
         const preise = document.createElement("div");
-        preise.textContent = "Tagesmiete: " + euro(Number(werkzeug.tag_eur)) +
-          (werkzeug.wochenende_eur ? " · Wochenende: " + euro(Number(werkzeug.wochenende_eur)) : "");
-        eintrag.appendChild(preise);
-        const einzelpreis = document.createElement("div");
+        preise.className = "mietkorb-position-preise";
+        function preiszeile(label, wert, klasse = "") {
+          const zeile = document.createElement("div");
+          if (klasse) zeile.className = klasse;
+          const titel = document.createElement("span");
+          titel.textContent = label;
+          const betrag = document.createElement("span");
+          betrag.textContent = wert;
+          zeile.append(titel, betrag);
+          preise.appendChild(zeile);
+        }
+        preiszeile("Tag", euro(Number(werkzeug.tag_eur)));
+        if (werkzeug.wochenende_eur) preiszeile("Wochenende", euro(Number(werkzeug.wochenende_eur)));
+        if (werkzeug.kaution_eur) preiszeile("Kaution", euro(Number(werkzeug.kaution_eur)));
         const start = alsDatum(mietbeginn.value);
         const ende = alsDatum(mietende.value);
         if (start && ende && ende >= start &&
             !(start.getUTCDay() === 6 && ende.getTime() === start.getTime() + einTag)) {
           const berechnung = berechnePreis(werkzeug, start, ende);
-          if (berechnung) einzelpreis.textContent = "Mietpreis für Zeitraum: " + euro(berechnung.gesamt);
+          if (berechnung) preiszeile("Mietpreis", euro(berechnung.gesamt), "mietkorb-position-summe");
         }
-        eintrag.appendChild(einzelpreis);
+        position.appendChild(preise);
+        eintrag.appendChild(position);
 
         const entfernen = document.createElement("button");
         entfernen.type = "button";
