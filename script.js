@@ -130,8 +130,19 @@ async function ladeWerkzeuge() {
         const k = Number(werkzeug.kaution_eur);
         if (werkzeug.kaution_eur !== "" && Number.isFinite(k) && k >= 0) kaution += k;
       }
-      hinweis("Voraussichtliche Mietkosten: " + euro(gesamt));
-      hinweis("Hinterlegte Kautionen insgesamt: " + euro(kaution) + " (zusätzlich, nicht Teil der Mietkosten)");
+      const gesamtmieteZeile = document.createElement("p");
+      const gesamtmieteFett = document.createElement("strong");
+      gesamtmieteFett.textContent = "Voraussichtliche Gesamtmiete: " + euro(gesamt);
+      gesamtmieteZeile.appendChild(gesamtmieteFett);
+      preisAnzeige.appendChild(gesamtmieteZeile);
+
+      const kautionZeile = document.createElement("p");
+      const kautionFett = document.createElement("strong");
+      kautionFett.textContent = "Gesamtkaution: " + euro(kaution);
+      kautionZeile.appendChild(kautionFett);
+      preisAnzeige.appendChild(kautionZeile);
+
+      hinweis("Die Kaution fällt zusätzlich an und ist nicht Teil der Mietkosten.");
       hinweis("Berechnung: Tagespreise und gegebenenfalls Wochenendpauschalen. Rückgabe am Montag bei Wochenendmiete.");
     }
     mietbeginn.addEventListener("change", aktualisiereWarenkorb);
