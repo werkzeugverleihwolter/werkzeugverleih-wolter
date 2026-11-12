@@ -208,7 +208,7 @@
     }
 
     .mietkorb-dialog {
-      width: min(440px, calc(100% - 24px));
+      width: min(680px, calc(100% - 24px));
       max-height: min(85vh, 700px);
       margin: auto;
       padding: 24px;
@@ -220,10 +220,15 @@
 
     .mietkorb-dialog::backdrop { background: #102b4c88; }
     .mietkorb-dialog h2 { font-size: 24px; margin: 0; }
-    .mietkorb-dialog ul { padding-left: 20px; }
-    .mietkorb-dialog li { margin: 12px 0; }
+    .mietkorb-dialog ul { padding: 0; list-style: none; }
+    .mietkorb-dialog li { margin: 12px 0; padding: 14px; border: 1px solid var(--border); border-radius: 9px; }
+    .mietkorb-position { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 12px; }
+    .mietkorb-position-name { font-weight: 700; color: var(--navy); }
+    .mietkorb-position-preise { text-align: right; white-space: nowrap; font-size: 14px; }
+    .mietkorb-position-preise div { display: flex; justify-content: space-between; gap: 12px; }
+    .mietkorb-position-summe { font-weight: 700; color: var(--navy); }
     .mietkorb-dialog li button {
-      margin-left: 10px;
+      margin-top: 10px;
       padding: 5px 9px;
       border: 1px solid var(--border);
       border-radius: 6px;
@@ -270,6 +275,8 @@
       .mietkorb-dialog { margin: auto; padding: 20px; }
       .mietkorb-trigger-text { display: none; }
       .mietkorb-trigger { margin-left: auto; }
+      .mietkorb-position { grid-template-columns: 1fr; }
+      .mietkorb-position-preise { text-align: left; white-space: normal; }
     }
 
     footer {
@@ -439,7 +446,7 @@
           <div class="card">
             <h3>3. Werkzeug abholen</h3>
             <p>
-              Hole dein Werkzeug zum vereinbarten Termin ab.
+              Hole dein Werkzeug zum vereinbarten Termin ab. Nach vorheriger Vereinbarung ist die Abholung am Vorabend kostenlos möglich und zählt nicht als zusätzlicher Miettag.
             </p>
           </div>
 
@@ -536,6 +543,8 @@
     </div>
     <p id="warenkorb-leer">Noch keine Werkzeuge ausgewählt.</p>
     <ul id="warenkorb-liste" aria-live="polite"></ul>
+    <div id="mietkorb-preis" class="mietkorb-preis" aria-live="polite">Wähle Werkzeuge und den Mietzeitraum aus, um die voraussichtlichen Kosten zu sehen.</div>
+    <h3>Mietzeitraum</h3>
     <div class="mietkorb-zeitraum">
       <label for="mietbeginn">Mietbeginn
         <input id="mietbeginn" type="date">
@@ -544,8 +553,8 @@
         <input id="mietende" type="date">
       </label>
     </div>
-    <div id="mietkorb-preis" class="mietkorb-preis" aria-live="polite">Wähle Werkzeuge und den Mietzeitraum aus, um die voraussichtlichen Kosten zu sehen.</div>
-    <p id="warenkorb-hinweis">Unverbindliche Preisübersicht – keine Reservierung und kein Versand. Verfügbarkeit und Rückgabetermin werden erst nach einer Anfrage bestätigt. Eine Kaution wird separat ausgewiesen.</p>
+    <p><strong>Kostenlose Vorabendabholung:</strong> Du benötigst das Werkzeug bereits am Morgen? Nach vorheriger Vereinbarung kannst du es kostenlos am Vorabend abholen. Der Vorabend zählt nicht als zusätzlicher Miettag.</p>
+    <p id="warenkorb-hinweis">Unverbindliche Preisübersicht – keine Reservierung und kein Versand. Verfügbarkeit sowie Abhol- und Rückgabetermine werden erst nach einer Anfrage bestätigt. Die Kaution wird separat ausgewiesen.</p>
   </dialog>
 
   <script src="script.js"></script>
