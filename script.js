@@ -58,6 +58,7 @@ async function ladeWerkzeuge() {
     const anfrageNachricht = document.getElementById("anfrage-nachricht");
     const anfrageAbsenden = document.getElementById("anfrage-absenden");
     const anfrageStatus = document.getElementById("anfrage-status");
+    const anfrageFehler = document.getElementById("anfrage-fehler");
     let anfrageLaeuft = false;
     const formspreeEndpoint = "https://formspree.io/f/mjywkyew";
     const euro = betrag => new Intl.NumberFormat("de-DE", {
@@ -120,14 +121,55 @@ async function ladeWerkzeuge() {
       return { gesamt, kaution, positionen };
     }
 
-    function aktualisiereAnfrageButton() {
-      const nameGueltig = anfrageName.value.trim().length >= 2;
+    function anfrageFehlerliste() {
+      const fehler = [];
+      if (!auswahl.size) fehler.push("Bitte wähle mindestens ein Werkzeug aus.");
+      const start = alsDatum(mietbeginn.value);
+      const ende = alsDatum(mietende.value);
+      if (!start) fehler.push("Bitte gib den Mietbeginn an.");
+      if (!ende) fehler.push("Bitte gib das Rückgabedatum an.");
+      if (start && ende) {
+        if (ende < start) {
+          fehler.push("Das Rückgabedatum darf nicht vor dem Mietbeginn liegen.");
+        } else if (ende.getUTCDay() === 0 && start.getTime() <= ende.getTime() - einTag) {
+          fehler.push("Bei einer Wochenendmiete mit Nutzung am Samstag und Sonntag wähle bitte Montag als Rückgabetag.");
+        }
+      }
+      if (auswahl.size && start && ende && ende >= start &&
+          !(ende.getUTCDay() === 0 && start.getTime() <= ende.getTime() - einTag) &&
+          !anfrageBerechnung()) {
+        fehler.push("Für mindestens ein Werkzeug können Mietpreis oder Kaution nicht berechnet werden.");
+      }
+      if (anfrageName.value.trim().length < 2) {
+        fehler.push("Bitte gib deinen Vor- und Nachnamen ein (mindestens zwei Zeichen).");
+      }
       const telefon = anfrageTelefon.value.trim();
-      const telefonGueltig = /^[+0-9() /-]{6,40}$/.test(telefon) &&
-        (telefon.match(/\d/g) || []).length >= 6;
-      const emailGueltig = anfrageEmail.validity.valid && anfrageEmail.value.trim() !== "";
-      anfrageAbsenden.disabled = anfrageLaeuft || !anfrageBerechnung() ||
-        !nameGueltig || !telefonGueltig || !emailGueltig;
+      if (!/^[+0-9() /-]{6,40}$/.test(telefon) ||
+          (telefon.match(/\d/g) || []).length < 6) {
+        fehler.push("Bitte gib eine gültige Telefonnummer mit mindestens sechs Ziffern ein.");
+      }
+      if (!anfrageEmail.value.trim() || !anfrageEmail.validity.valid) {
+        fehler.push("Bitte gib eine gültige E-Mail-Adresse ein.");
+      }
+      return fehler;
+    }
+
+    function aktualisiereAnfrageButton() {
+      const fehler = anfrageFehlerliste();
+      anfrageAbsenden.disabled = anfrageLaeuft || fehler.length > 0;
+      anfrageFehler.replaceChildren();
+      anfrageFehler.hidden = fehler.length === 0;
+      if (fehler.length) {
+        const titel = document.createElement("p");
+        titel.textContent = "Bitte korrigiere folgende Angaben:";
+        const liste = document.createElement("ul");
+        for (const meldung of fehler) {
+          const punkt = document.createElement("li");
+          punkt.textContent = meldung;
+          liste.appendChild(punkt);
+        }
+        anfrageFehler.append(titel, liste);
+      }
     }
 
     for (const feld of [anfrageName, anfrageTelefon, anfrageEmail, anfrageNachricht]) {
