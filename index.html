@@ -180,24 +180,74 @@
       background: var(--navy);
     }
 
-    .anfrage-warenkorb {
-      margin: 26px 0 34px;
-      padding: 22px;
-      background: #fff;
+    .mietkorb-trigger {
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      padding: 10px 12px;
       border: 1px solid var(--border);
-      border-radius: 12px;
+      border-radius: 9px;
+      background: #f3f6fa;
+      color: var(--navy);
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+      white-space: nowrap;
     }
 
-    .anfrage-warenkorb h3 { margin: 0 0 8px; color: var(--navy); }
-    .anfrage-warenkorb ul { padding-left: 22px; }
-    .anfrage-warenkorb li { margin: 10px 0; }
-    .anfrage-warenkorb li button {
-      margin-left: 12px;
+    .mietkorb-trigger svg { width: 23px; height: 23px; }
+    .mietkorb-anzahl {
+      min-width: 23px;
+      padding: 1px 6px;
+      border-radius: 999px;
+      background: var(--blue);
+      color: #fff;
+      text-align: center;
+      font-size: 13px;
+    }
+
+    .mietkorb-dialog {
+      width: min(440px, calc(100% - 24px));
+      max-height: min(85vh, 700px);
+      margin: auto 12px auto auto;
+      padding: 24px;
+      border: 1px solid var(--border);
+      border-radius: 14px;
+      box-shadow: 0 16px 48px #102b4c44;
+      color: var(--text);
+    }
+
+    .mietkorb-dialog::backdrop { background: #102b4c88; }
+    .mietkorb-dialog h2 { font-size: 24px; margin: 0; }
+    .mietkorb-dialog ul { padding-left: 20px; }
+    .mietkorb-dialog li { margin: 12px 0; }
+    .mietkorb-dialog li button {
+      margin-left: 10px;
+      padding: 5px 9px;
       border: 1px solid var(--border);
       border-radius: 6px;
       background: #fff;
-      padding: 4px 10px;
       cursor: pointer;
+    }
+    .mietkorb-dialog-kopf {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      gap: 12px;
+    }
+    .mietkorb-schliessen {
+      padding: 6px 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #fff;
+      font: inherit;
+      cursor: pointer;
+    }
+    @media (max-width: 700px) {
+      .mietkorb-dialog { margin: auto; padding: 20px; }
+      .mietkorb-trigger-text { display: none; }
+      .mietkorb-trigger { margin-left: auto; }
     }
 
     footer {
@@ -265,6 +315,15 @@
         <a href="#kontakt">Kontakt</a>
       </nav>
 
+      <button id="mietkorb-oeffnen" class="mietkorb-trigger" type="button" aria-haspopup="dialog" aria-controls="mietkorb-dialog" aria-label="Mietkorb öffnen, 0 Werkzeuge">
+        <svg aria-hidden="true" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+          <circle cx="9" cy="21" r="1"></circle><circle cx="20" cy="21" r="1"></circle>
+          <path d="M1 1h4l2.5 13h12l2.5-9H6"></path>
+        </svg>
+        <span class="mietkorb-trigger-text">Mietkorb</span>
+        <span id="mietkorb-anzahl" class="mietkorb-anzahl" aria-hidden="true">0</span>
+      </button>
+
     </div>
   </header>
 
@@ -302,13 +361,6 @@
           Handkreissäge und Winkelschleifer sowie passendes Zubehör
           und praktische Komplettsets.
         </p>
-
-        <div id="anfrage-warenkorb" class="anfrage-warenkorb" aria-labelledby="warenkorb-titel">
-          <h3 id="warenkorb-titel">Mietanfrage-Warenkorb (<span id="warenkorb-anzahl">0</span>)</h3>
-          <p id="warenkorb-leer">Noch keine Werkzeuge ausgewählt.</p>
-          <ul id="warenkorb-liste" aria-live="polite"></ul>
-          <p id="warenkorb-hinweis">Im nächsten Schritt ergänzen wir den gemeinsamen Mietzeitraum und das Anfrageformular. Noch kein Versand möglich.</p>
-        </div>
 
         <div class="grid">
 
@@ -454,6 +506,16 @@
 
     </div>
   </footer>
+
+  <dialog id="mietkorb-dialog" class="mietkorb-dialog" aria-labelledby="mietkorb-titel">
+    <div class="mietkorb-dialog-kopf">
+      <h2 id="mietkorb-titel">Dein Mietkorb</h2>
+      <button id="mietkorb-schliessen" class="mietkorb-schliessen" type="button" aria-label="Mietkorb schließen">Schließen</button>
+    </div>
+    <p id="warenkorb-leer">Noch keine Werkzeuge ausgewählt.</p>
+    <ul id="warenkorb-liste" aria-live="polite"></ul>
+    <p id="warenkorb-hinweis">Die Auswahl ist noch keine Reservierung. Mietzeitraum und Anfrageformular folgen im nächsten Schritt.</p>
+  </dialog>
 
   <script src="script.js"></script>
 
