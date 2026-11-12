@@ -238,6 +238,18 @@ async function ladeWerkzeuge() {
           pfeil.textContent = "▲";
           kategorieButton.setAttribute("aria-expanded", "true");
           offeneKategorie = karten;
+
+          // Nach dem Schließen einer anderen Kategorie verändert sich die
+          // Seitenhöhe. Erst nach dem Layout die neue Überschrift ausrichten.
+          requestAnimationFrame(() => {
+            if (kategorieButton.getAttribute("aria-expanded") !== "true") return;
+            kategorieButton.scrollIntoView({
+              block: "start",
+              behavior: window.matchMedia("(prefers-reduced-motion: reduce)").matches
+                ? "instant"
+                : "smooth"
+            });
+          });
         }
       });
 
