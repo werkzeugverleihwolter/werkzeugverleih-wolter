@@ -41,15 +41,30 @@ async function ladeWerkzeuge() {
 
     // Auswahl nur im aktuellen Seitenaufruf; noch keine Buchung oder Anfrage.
     const auswahl = new Map();
-    const warenkorb = document.getElementById("anfrage-warenkorb");
+    const mietkorbDialog = document.getElementById("mietkorb-dialog");
+    const mietkorbOeffnen = document.getElementById("mietkorb-oeffnen");
+    const mietkorbSchliessen = document.getElementById("mietkorb-schliessen");
     const warenkorbListe = document.getElementById("warenkorb-liste");
-    const warenkorbAnzahl = document.getElementById("warenkorb-anzahl");
+    const warenkorbAnzahl = document.getElementById("mietkorb-anzahl");
     const warenkorbLeer = document.getElementById("warenkorb-leer");
     const auswahlButtons = new Map();
+
+    mietkorbOeffnen.addEventListener("click", () => mietkorbDialog.showModal());
+    mietkorbSchliessen.addEventListener("click", () => mietkorbDialog.close());
+    mietkorbDialog.addEventListener("click", event => {
+      if (event.target === mietkorbDialog) {
+        const rect = mietkorbDialog.getBoundingClientRect();
+        if (event.clientX < rect.left || event.clientX > rect.right ||
+            event.clientY < rect.top || event.clientY > rect.bottom) {
+          mietkorbDialog.close();
+        }
+      }
+    });
 
     function aktualisiereWarenkorb() {
       warenkorbListe.replaceChildren();
       warenkorbAnzahl.textContent = String(auswahl.size);
+      mietkorbOeffnen.setAttribute("aria-label", "Mietkorb öffnen, " + auswahl.size + " Werkzeuge");
       warenkorbLeer.hidden = auswahl.size > 0;
 
       for (const [id, name] of auswahl) {
@@ -61,7 +76,7 @@ async function ladeWerkzeuge() {
         const entfernen = document.createElement("button");
         entfernen.type = "button";
         entfernen.textContent = "Entfernen";
-        entfernen.setAttribute("aria-label", name + " aus dem Warenkorb entfernen");
+        entfernen.setAttribute("aria-label", name + " aus dem Mietkorb entfernen");
         entfernen.addEventListener("click", () => {
           auswahl.delete(id);
           aktualisiereWarenkorb();
