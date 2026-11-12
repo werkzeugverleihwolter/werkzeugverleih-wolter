@@ -162,6 +162,44 @@
       overflow-wrap: anywhere;
     }
 
+    .mietanfrage-button {
+      display: inline-block;
+      width: 100%;
+      padding: 12px 16px;
+      margin-top: 16px;
+      border: 0;
+      border-radius: 8px;
+      background: var(--blue);
+      color: #fff;
+      font: inherit;
+      font-weight: 700;
+      cursor: pointer;
+    }
+
+    .mietanfrage-button[aria-pressed="true"] {
+      background: var(--navy);
+    }
+
+    .anfrage-warenkorb {
+      margin: 26px 0 34px;
+      padding: 22px;
+      background: #fff;
+      border: 1px solid var(--border);
+      border-radius: 12px;
+    }
+
+    .anfrage-warenkorb h3 { margin: 0 0 8px; color: var(--navy); }
+    .anfrage-warenkorb ul { padding-left: 22px; }
+    .anfrage-warenkorb li { margin: 10px 0; }
+    .anfrage-warenkorb li button {
+      margin-left: 12px;
+      border: 1px solid var(--border);
+      border-radius: 6px;
+      background: #fff;
+      padding: 4px 10px;
+      cursor: pointer;
+    }
+
     footer {
       background-color: #0b203a;
       color: #ffffff;
@@ -264,6 +302,13 @@
           Handkreissäge und Winkelschleifer sowie passendes Zubehör
           und praktische Komplettsets.
         </p>
+
+        <div id="anfrage-warenkorb" class="anfrage-warenkorb" aria-labelledby="warenkorb-titel">
+          <h3 id="warenkorb-titel">Mietanfrage-Warenkorb (<span id="warenkorb-anzahl">0</span>)</h3>
+          <p id="warenkorb-leer">Noch keine Werkzeuge ausgewählt.</p>
+          <ul id="warenkorb-liste" aria-live="polite"></ul>
+          <p id="warenkorb-hinweis">Im nächsten Schritt ergänzen wir den gemeinsamen Mietzeitraum und das Anfrageformular. Noch kein Versand möglich.</p>
+        </div>
 
         <div class="grid">
 
