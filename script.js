@@ -72,6 +72,10 @@ async function ladeWerkzeuge() {
         datum.getUTCDate() === tag ? datum : null;
     };
     const einTag = 86400000;
+    const heuteLokal = () => {
+      const jetzt = new Date();
+      return new Date(Date.UTC(jetzt.getFullYear(), jetzt.getMonth(), jetzt.getDate()));
+    };
 
     // Wochenendpauschale: Samstag bis Montag (Montag ist Rückgabetag).
     // Zusätzliche Tage außerhalb des Wochenendblocks zählen als Tagesmiete.
@@ -105,8 +109,8 @@ async function ladeWerkzeuge() {
       if (!auswahl.size) return null;
       const start = alsDatum(mietbeginn.value);
       const ende = alsDatum(mietende.value);
-      if (!start || !ende || ende < start) return null;
-      if (ende.getUTCDay() === 0 && start.getTime() <= ende.getTime() - einTag) return null;
+      if (!start || !ende || start < heuteLokal() || ende < start) return null;
+      if (ende.getUTCDay() === 0) return null;
       let gesamt = 0;
       let kaution = 0;
       const positionen = [];
@@ -128,15 +132,16 @@ async function ladeWerkzeuge() {
       const ende = alsDatum(mietende.value);
       if (!start) fehler.push("Bitte gib den Mietbeginn an.");
       if (!ende) fehler.push("Bitte gib das Rückgabedatum an.");
+      if (start && start < heuteLokal()) fehler.push("Der Mietbeginn darf nicht in der Vergangenheit liegen.");
       if (start && ende) {
         if (ende < start) {
           fehler.push("Das Rückgabedatum darf nicht vor dem Mietbeginn liegen.");
-        } else if (ende.getUTCDay() === 0 && start.getTime() <= ende.getTime() - einTag) {
-          fehler.push("Bei einer Wochenendmiete mit Nutzung am Samstag und Sonntag wähle bitte Montag als Rückgabetag.");
+        } else if (ende.getUTCDay() === 0) {
+          fehler.push("Sonntags ist keine reguläre Rückgabe möglich. Bitte wähle einen anderen Rückgabetag oder vereinbare eine Ausnahme persönlich.");
         }
       }
-      if (auswahl.size && start && ende && ende >= start &&
-          !(ende.getUTCDay() === 0 && start.getTime() <= ende.getTime() - einTag) &&
+      if (auswahl.size && start && ende && start >= heuteLokal() && ende >= start &&
+          ende.getUTCDay() !== 0 &&
           !anfrageBerechnung()) {
         fehler.push("Für mindestens ein Werkzeug können Mietpreis oder Kaution nicht berechnet werden.");
       }
@@ -255,14 +260,17 @@ async function ladeWerkzeuge() {
         hinweis("Bitte Mietbeginn und Rückgabedatum auswählen.");
         return;
       }
+      if (start < heuteLokal()) {
+        hinweis("Der Mietbeginn darf nicht in der Vergangenheit liegen.");
+        return;
+      }
       if (ende < start) {
         hinweis("Das Rückgabedatum darf nicht vor dem Mietbeginn liegen.");
         return;
       }
-      // Wochenendmiete umfasst Samstag und Sonntag; Rückgabe am Montag.
-      // Ein bis Sonntag gewählter Zeitraum wird nicht stillschweigend verlängert.
-      if (ende.getUTCDay() === 0 && start.getTime() <= ende.getTime() - einTag) {
-        hinweis("Für eine Wochenendmiete mit Nutzung am Samstag und Sonntag erfolgt die Rückgabe am Montag. Bitte Montag als Rückgabedatum auswählen, um die Wochenendpauschale zu berechnen.");
+      // Sonntags keine reguläre Rückgabe; Ausnahmen nur nach persönlicher Absprache.
+      if (ende.getUTCDay() === 0) {
+        hinweis("Sonntags ist keine reguläre Rückgabe möglich. Bitte einen anderen Rückgabetag auswählen oder eine Ausnahme persönlich vereinbaren.");
         return;
       }
       let gesamt = 0;
@@ -341,8 +349,8 @@ async function ladeWerkzeuge() {
         if (werkzeug.kaution_eur) preiszeile("Kaution", euro(Number(werkzeug.kaution_eur)));
         const start = alsDatum(mietbeginn.value);
         const ende = alsDatum(mietende.value);
-        if (start && ende && ende >= start &&
-            !(ende.getUTCDay() === 0 && start.getTime() <= ende.getTime() - einTag)) {
+        if (start && ende && start >= heuteLokal() && ende >= start &&
+            ende.getUTCDay() !== 0) {
           const berechnung = berechnePreis(werkzeug, start, ende);
           if (berechnung) preiszeile("Mietpreis", euro(berechnung.gesamt), "mietkorb-position-summe");
         }
