@@ -124,7 +124,7 @@ async function ladeWerkzeuge() {
       const nameGueltig = anfrageName.value.trim().length >= 2;
       const telefon = anfrageTelefon.value.trim();
       const telefonGueltig = /^[+0-9() /-]{6,40}$/.test(telefon) &&
-        (telefon.match(/\\d/g) || []).length >= 6;
+        (telefon.match(/\d/g) || []).length >= 6;
       const emailGueltig = anfrageEmail.validity.valid && anfrageEmail.value.trim() !== "";
       anfrageAbsenden.disabled = anfrageLaeuft || !anfrageBerechnung() ||
         !nameGueltig || !telefonGueltig || !emailGueltig;
@@ -158,7 +158,7 @@ async function ladeWerkzeuge() {
       daten.set("nachricht", anfrageNachricht.value.trim());
       daten.set("mietbeginn", mietbeginn.value);
       daten.set("rueckgabe", mietende.value);
-      daten.set("werkzeuge", berechnung.positionen.join("\\n"));
+      daten.set("werkzeuge", berechnung.positionen.join("\n"));
       daten.set("voraussichtliche_gesamtmiete", euro(berechnung.gesamt));
       daten.set("gesamtkaution", euro(berechnung.kaution));
       daten.set("_subject", "Mietanfrage – Werkzeugverleih Wolter");
