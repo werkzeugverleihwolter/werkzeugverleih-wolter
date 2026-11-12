@@ -210,9 +210,19 @@ async function ladeWerkzeuge() {
           headers: { Accept: "application/json" }
         });
         if (!antwort.ok) throw new Error("Form.taxi HTTP " + antwort.status);
-        const ergebnis = await antwort.json();
-        if (ergebnis.success !== true) {
-          throw new Error("Form.taxi hat die Anfrage nicht bestätigt.");
+        // Form.taxi kann bei erfolgreicher Übermittlung auch ohne JSON-Antwort antworten.
+        // Einen ausdrücklich gemeldeten Anwendungsfehler weiterhin berücksichtigen.
+        const antwortText = await antwort.text();
+        if (antwortText.trim()) {
+          let ergebnis;
+          try {
+            ergebnis = JSON.parse(antwortText);
+          } catch {
+            // HTTP-Erfolg ohne auswertbares JSON: keine zusätzliche Erfolgsbedingung.
+          }
+          if (ergebnis && (ergebnis.success === false || ergebnis.error === true)) {
+            throw new Error("Form.taxi hat einen Übermittlungsfehler gemeldet.");
+          }
         }
         anfrageStatus.textContent = "Deine unverbindliche Mietanfrage wurde übermittelt. Wir prüfen die Verfügbarkeit und melden uns bei dir.";
         anfrageStatus.dataset.erfolg = "true";
