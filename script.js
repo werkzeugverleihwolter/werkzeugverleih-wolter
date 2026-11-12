@@ -60,7 +60,7 @@ async function ladeWerkzeuge() {
     const anfrageStatus = document.getElementById("anfrage-status");
     const anfrageFehler = document.getElementById("anfrage-fehler");
     let anfrageLaeuft = false;
-    const formspreeEndpoint = "https://formspree.io/f/mjywkyew";
+    const formTaxiEndpoint = "https://form.taxi/s/gkbdh6rm";
     const euro = betrag => new Intl.NumberFormat("de-DE", {
       style: "currency", currency: "EUR"
     }).format(betrag);
@@ -203,14 +203,17 @@ async function ladeWerkzeuge() {
       daten.set("werkzeuge", berechnung.positionen.join("\n"));
       daten.set("voraussichtliche_gesamtmiete", euro(berechnung.gesamt));
       daten.set("gesamtkaution", euro(berechnung.kaution));
-      daten.set("_subject", "Mietanfrage – Werkzeugverleih Wolter");
       try {
-        const antwort = await fetch(formspreeEndpoint, {
+        const antwort = await fetch(formTaxiEndpoint, {
           method: "POST",
           body: daten,
           headers: { Accept: "application/json" }
         });
-        if (!antwort.ok) throw new Error("Formspree HTTP " + antwort.status);
+        if (!antwort.ok) throw new Error("Form.taxi HTTP " + antwort.status);
+        const ergebnis = await antwort.json();
+        if (ergebnis.success !== true) {
+          throw new Error("Form.taxi hat die Anfrage nicht bestätigt.");
+        }
         anfrageStatus.textContent = "Deine unverbindliche Mietanfrage wurde übermittelt. Wir prüfen die Verfügbarkeit und melden uns bei dir.";
         anfrageStatus.dataset.erfolg = "true";
         anfrageForm.reset();
