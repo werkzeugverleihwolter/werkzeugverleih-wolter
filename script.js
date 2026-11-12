@@ -112,10 +112,10 @@ async function ladeWerkzeuge() {
         hinweis("Das Rückgabedatum darf nicht vor dem Mietbeginn liegen.");
         return;
       }
-      // Samstag bis Sonntag ist kein vollständiger Wochenendzeitraum:
-      // Bei Wochenendmiete erfolgt die Rückgabe am Montag.
-      if (start.getUTCDay() === 6 && ende.getTime() === start.getTime() + einTag) {
-        hinweis("Bei einer Wochenendmiete erfolgt die Rückgabe am Montag. Bitte Montag als Rückgabedatum auswählen.");
+      // Wochenendmiete umfasst Samstag und Sonntag; Rückgabe am Montag.
+      // Ein bis Sonntag gewählter Zeitraum wird nicht stillschweigend verlängert.
+      if (ende.getUTCDay() === 0 && start.getTime() <= ende.getTime() - einTag) {
+        hinweis("Für eine Wochenendmiete mit Nutzung am Samstag und Sonntag erfolgt die Rückgabe am Montag. Bitte Montag als Rückgabedatum auswählen, um die Wochenendpauschale zu berechnen.");
         return;
       }
       let gesamt = 0;
@@ -184,7 +184,7 @@ async function ladeWerkzeuge() {
         const start = alsDatum(mietbeginn.value);
         const ende = alsDatum(mietende.value);
         if (start && ende && ende >= start &&
-            !(start.getUTCDay() === 6 && ende.getTime() === start.getTime() + einTag)) {
+            !(ende.getUTCDay() === 0 && start.getTime() <= ende.getTime() - einTag)) {
           const berechnung = berechnePreis(werkzeug, start, ende);
           if (berechnung) preiszeile("Mietpreis", euro(berechnung.gesamt), "mietkorb-position-summe");
         }
