@@ -310,6 +310,25 @@ async function ladeWerkzeuge() {
     mietbeginn.addEventListener("change", aktualisiereWarenkorb);
     mietende.addEventListener("change", aktualisiereWarenkorb);
 
+    // Erst nach Verlassen des Headers und bei gefülltem Mietkorb schwebend anzeigen.
+    // requestAnimationFrame begrenzt Layout-Arbeit bei schnellen Scrollbewegungen.
+    let mietkorbScrollGeplant = false;
+    function aktualisiereMietkorbPosition() {
+      const header = document.querySelector("header");
+      const headerHoehe = header ? header.getBoundingClientRect().height : 0;
+      const ausserhalbHeader = window.scrollY > headerHoehe;
+      mietkorbOeffnen.classList.toggle("mietkorb-schwebend", ausserhalbHeader && auswahl.size > 0);
+    }
+    window.addEventListener("scroll", () => {
+      if (mietkorbScrollGeplant) return;
+      mietkorbScrollGeplant = true;
+      window.requestAnimationFrame(() => {
+        mietkorbScrollGeplant = false;
+        aktualisiereMietkorbPosition();
+      });
+    }, { passive: true });
+    window.addEventListener("resize", aktualisiereMietkorbPosition);
+
     mietkorbOeffnen.addEventListener("click", () => mietkorbDialog.showModal());
     mietkorbSchliessen.addEventListener("click", () => mietkorbDialog.close());
     mietkorbDialog.addEventListener("click", event => {
@@ -325,6 +344,7 @@ async function ladeWerkzeuge() {
     function aktualisiereWarenkorb() {
       warenkorbListe.replaceChildren();
       warenkorbAnzahl.textContent = String(auswahl.size);
+      aktualisiereMietkorbPosition();
       mietkorbOeffnen.setAttribute("aria-label", "Mietkorb öffnen, " + auswahl.size + " Werkzeuge");
       warenkorbLeer.hidden = auswahl.size > 0;
 
