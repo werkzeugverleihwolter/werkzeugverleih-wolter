@@ -60,6 +60,7 @@ async function ladeWerkzeuge() {
     const anfrageStatus = document.getElementById("anfrage-status");
     const anfrageFehler = document.getElementById("anfrage-fehler");
     let anfrageLaeuft = false;
+    let anfrageErfolgreich = false;
     const formTaxiEndpoint = "https://form.taxi/s/gkbdh6rm";
     const euro = betrag => new Intl.NumberFormat("de-DE", {
       style: "currency", currency: "EUR"
@@ -160,8 +161,8 @@ async function ladeWerkzeuge() {
     }
 
     function aktualisiereAnfrageButton() {
-      const fehler = anfrageFehlerliste();
-      anfrageAbsenden.disabled = anfrageLaeuft || fehler.length > 0;
+      const fehler = anfrageErfolgreich ? [] : anfrageFehlerliste();
+      anfrageAbsenden.disabled = anfrageLaeuft || anfrageErfolgreich || fehler.length > 0;
       anfrageFehler.replaceChildren();
       anfrageFehler.hidden = fehler.length === 0;
       if (fehler.length) {
@@ -179,6 +180,7 @@ async function ladeWerkzeuge() {
 
     for (const feld of [anfrageName, anfrageTelefon, anfrageEmail, anfrageNachricht]) {
       feld.addEventListener("input", () => {
+        if (anfrageErfolgreich) return;
         anfrageStatus.textContent = "";
         anfrageStatus.removeAttribute("role");
         delete anfrageStatus.dataset.erfolg;
@@ -229,9 +231,14 @@ async function ladeWerkzeuge() {
             throw new Error("Form.taxi hat einen Übermittlungsfehler gemeldet.");
           }
         }
-        anfrageStatus.textContent = "Deine unverbindliche Mietanfrage wurde übermittelt. Wir prüfen die Verfügbarkeit und melden uns bei dir.";
+        anfrageErfolgreich = true;
+        anfrageStatus.textContent = "Deine Mietanfrage wurde erfolgreich übermittelt. Bitte nicht erneut absenden. Wir prüfen die Verfügbarkeit und melden uns bei dir.";
         anfrageStatus.dataset.erfolg = "true";
+        anfrageStatus.setAttribute("role", "status");
         anfrageForm.reset();
+        anfrageFehler.replaceChildren();
+        anfrageFehler.hidden = true;
+        anfrageStatus.scrollIntoView({ behavior: "smooth", block: "center" });
       } catch (fehler) {
         console.error("Mietanfrage konnte nicht gesendet werden:", fehler);
         anfrageStatus.textContent = "Die Anfrage konnte nicht übermittelt werden. Bitte versuche es erneut oder kontaktiere uns per E-Mail bzw. Telefon.";
