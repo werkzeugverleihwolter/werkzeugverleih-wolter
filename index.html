@@ -196,7 +196,26 @@
       white-space: nowrap;
     }
 
-    .mietkorb-trigger svg { width: 23px; height: 23px; }
+    /* Beim Scrollen erscheint der vorhandene Mietkorb als kompakter, fester Zugang. */
+    .mietkorb-trigger.mietkorb-schwebend {
+      position: fixed;
+      right: max(16px, env(safe-area-inset-right));
+      bottom: max(16px, env(safe-area-inset-bottom));
+      z-index: 100;
+      background: var(--navy);
+      color: #fff;
+      border-color: var(--navy);
+      box-shadow: 0 6px 22px #102b4c55;
+    }
+    .mietkorb-trigger.mietkorb-schwebend .mietkorb-anzahl {
+      background: #fff;
+      color: var(--navy);
+    }
+    .mietkorb-trigger:focus-visible { outline: 3px solid var(--blue); outline-offset: 3px; }
+    @media (max-width: 700px) {
+      .mietkorb-trigger.mietkorb-schwebend { min-width: 60px; min-height: 52px; }
+    }
+        .mietkorb-trigger svg { width: 23px; height: 23px; }
     .mietkorb-anzahl {
       min-width: 23px;
       padding: 1px 6px;
